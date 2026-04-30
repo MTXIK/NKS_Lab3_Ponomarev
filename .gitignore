@@ -17,6 +17,9 @@ model.zip
 *.pt
 *.pth
 *.ckpt
+*.pyc
+*.pyo
+*.pyd
 
 !config.json
 !tokenizer.json
