@@ -1,0 +1,8 @@
+torch
+transformers
+peft
+accelerate
+fastapi
+uvicorn
+pydantic
+python-multipart

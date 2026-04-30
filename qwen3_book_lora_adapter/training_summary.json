@@ -1,0 +1,28 @@
+{
+  "topic": "Практическое машинное обучение по книге Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow",
+  "base_model": "Qwen/Qwen3-1.7B",
+  "dataset_path": "book_based_corpus",
+  "method": "LoRA FP16",
+  "lora_adapter_path": "./qwen3_book_lora_adapter",
+  "num_train_examples": 798,
+  "num_eval_examples": 89,
+  "max_seq_length": 384,
+  "num_train_epochs": 2,
+  "per_device_train_batch_size": 1,
+  "gradient_accumulation_steps": 8,
+  "effective_batch_size": 8,
+  "learning_rate": 0.0002,
+  "lora_r": 16,
+  "lora_alpha": 32,
+  "lora_dropout": 0.05,
+  "target_modules": [
+    "k_proj",
+    "q_proj",
+    "o_proj",
+    "v_proj"
+  ],
+  "training_time_seconds": 701.5485446453094,
+  "training_time_minutes": 11.69247574408849,
+  "adapter_size_bytes": 37154023,
+  "adapter_size_mb": 35.43283748626709
+}

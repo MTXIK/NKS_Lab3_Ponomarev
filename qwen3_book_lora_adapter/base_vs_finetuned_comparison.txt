@@ -1,0 +1,52 @@
+Сравнение ответов базовой и дообученной модели
+====================================================================================================
+
+Тема: Практическое машинное обучение по книге Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow
+Базовая модель: Qwen/Qwen3-1.7B
+Метод: LoRA FP16
+LoRA-адаптер: ./qwen3_book_lora_adapter
+
+====================================================================================================
+PROMPT:
+Explain what the book Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow is about.
+
+BASE MODEL ANSWER:
+The book *Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow* is a practical guide that teaches readers how to build and deploy machine learning models using Python. It covers topics such as data preprocessing, model building with scikit-learn, deep learning with Keras and TensorFlow, and model evaluation. The book is designed for both beginners and experienced developers who want to apply machine learning concepts in real-world scenarios.
+
+FINE-TUNED MODEL ANSWER:
+1987) to build a neural network for handwritten digit recognition. The first fully connected feedforward network was built in 1957 by Donald Hebb (the Hebbian learning rule), but it did not get much attention until the late 1960s. It was then that neural networks became popular again thanks to Marvin Minsky, who created one of the first functional neural networks in 1943 and later developed the theory behind them. In 1962, Arthur Samuel invented the game-playing program called Bellicium that could learn how to play checkers without being explicitly told the rules. This was the first known case of a machine learning algorithm performing an unsupervised task. In 1965, the so-called "Cyberneticists" published a paper titled "The Mind of a Computer," which described how a simple artificial neural network might be used to simulate the human brain. A few years later, the same group published a paper describing the "Cybernetics" project, which included building a rudimentary AI system using a self-organizing neural network. The first Artificial Neural Network (ANN) was proposed by Warren McCullough and Walter Pitts in 1943, as part of their research on biological neurons. Their model consisted of a single layer of perceptrons, each containing two inputs, one output, and a bias. They also introduced the concept of activation functions: these define how strong the input signal is at any given moment. For example, if the input signal is very strong, then the neuron will activate its output. If the input signal is weak, then the neuron will not activate its output. By the time they were ready to test their model, however, they had already been asked to stop due to funding constraints. Nevertheless, this was the beginning of the end of the theoretical phase of artificial intelligence, since the model was able to reproduce a certain pattern of behavior. Shortly after this, other researchers began exploring the possibility of simulating more complex behaviors. In particular, they found that the ability to perform some simple logical operations can be simulated by a single-layer neural network. This sparked interest in neural nets, especially among computer scientists interested in simulation and control systems. Soon after, the field saw many advances in both theory and practice. Researchers discovered that there were many ways to train a neural network; in fact, they realized that you could even use different types
+
+====================================================================================================
+PROMPT:
+What are the main stages of a machine learning project?
+
+BASE MODEL ANSWER:
+The main stages of a machine learning project are:
+
+1. **Problem Definition**: Clearly define the task, objectives, and evaluation metrics.
+2. **Data Collection**: Gather relevant data from various sources.
+3. **Data Preprocessing**: Clean, normalize, and transform the data for modeling.
+4. **Feature Engineering**: Create meaningful features from raw data.
+5. **Model Selection**: Choose appropriate algorithms based on the problem type (e.g., regression, classification).
+6. **Training Model**: Fit the model to the training data.
+7. **Evaluation**: Assess model performance using validation and test sets.
+8. **Deployment**: Implement the model in a production environment.
+9. **Monitoring & Maintenance**: Continuously monitor and update the model as needed.
+
+FINE-TUNED MODEL ANSWER:
+and 10,000s of other datasets for training purposes (see Chapter 2). It is also possible to use preprocessed data from online sources such as Kaggle or the UCI Machine Learning Repository. In short, the following steps can be used to build a good ML model: 1. Collect your dataset(s) and preprocess them. This includes handling missing values, outliers, duplicates, class imbalances, and converting text features into numerical ones using TF-IDF or word embeddings. For more information about preprocessing, see Chapter 3. 2. Choose the right algorithm(s) that will solve your problem. For example, if you want to predict whether someone will buy a house in Boston, then linear regression would probably work fine, but it could fail if there were too many exceptions; in this case, logistic regression may help. If you have a binary classification task with high class imbalance, you should consider boosting algorithms such as Random Forests, Gradient Boosting Trees, or XGBoost. If you have multiclass classification tasks, you might need to try several algorithms until one works best. You may even need to do some hyperparameter tuning on these models to find the best combination of parameters. 3. Split your dataset into train and test sets. A common rule of thumb is to allocate 70% of the instances to the training set and leave the rest untouched for testing. If you don t have access to any unlabeled data, you should instead randomly split your training set into two parts, one for training and one for validation. Once you are satisfied with how well your model performs on the training set, you can move forward by evaluating its performance on the validation set, which helps you understand how much overfitting or underfitting your model has. If it seems underfitting, you may need to add more features to the input vector, increase the number of epochs, tune the learning rate, or choose a different architecture. If it appears overfitting, you should reduce the complexity of your model, remove noisy examples, add regularization terms, or tune the hyperparameters. 4. Train your model on the training set. This step is often time-consuming, so it s usually worth doing it just once per model, since it is unlikely that you will get better results after that point. If you plan to optimize your model further (e.g., by trying new architectures, regularizations, or hyperparameters), then it is
+
+====================================================================================================
+PROMPT:
+Explain the difference between Scikit-Learn, Keras, and TensorFlow.
+
+BASE MODEL ANSWER:
+Scikit-Learn is a machine learning library for data analysis and modeling, focusing on traditional ML algorithms like SVMs, decision trees, and clustering. It provides tools for preprocessing, model selection, and evaluation.
+
+Keras is a high-level neural network API that runs on top of deep learning frameworks like TensorFlow or Theano, enabling rapid development of neural networks with simple APIs.
+
+TensorFlow is an open-source machine learning framework developed by Google, supporting both traditional ML and deep learning. It offers tools for building and training models, including neural networks, and integrates well with other libraries.
+
+FINE-TUNED MODEL ANSWER:
+TensorFlow is a deep learning framework developed by Google that was first released in 2015. It supports both research and production environments, including distributed training, GPU acceleration, model deployment (e.g., via the TensorFlow Serving library), and custom hardware accelerators such as TPUs or GPUs with Tensor Processing Units (TPUs). Keras is an open-source machine learning library developed by François Chollet (Google Research) and supported by many other developers, including Google. It was created to make it easier for people to experiment quickly using neural networks, especially for research purposes. It also aims to simplify building models by providing a high-level API based on Python functions. Finally, scikit-learn is a set of tools for data analysis, machine learning, and data visualization. It provides several basic algorithms, but its main strength lies in its versatility: you can use it for classification, clustering, regression, unsupervised learning, time series forecasting, natural language processing (NLP), computer vision, text mining, etc. All these tasks are possible using only a few lines of code. In short, the three most popular ML libraries are Scikit-Learn, Keras, and TensorFlow. Each one has its own unique strengths and weaknesses, so the choice depends on your needs. If you want to experiment rapidly without worrying about the details, then Scikit-Learn is probably best. If you need more control over how you build and train your models, then Keras is better. And if you want to run your trained models efficiently on large-scale systems, then TensorFlow is definitely the way to go.
+

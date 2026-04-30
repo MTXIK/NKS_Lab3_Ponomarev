@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>NKS Lab 3 — Fine-tuned Qwen3 Chat</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            background: #ffffff;
+            border-radius: 14px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+
+        .header {
+            background: #1f2937;
+            color: white;
+            padding: 20px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .header p {
+            margin: 8px 0 0 0;
+            color: #d1d5db;
+            font-size: 14px;
+        }
+
+        #chat-window {
+            height: 520px;
+            overflow-y: auto;
+            padding: 20px;
+            background: #f9fafb;
+        }
+
+        .message {
+            max-width: 75%;
+            margin-bottom: 15px;
+            padding: 12px 14px;
+            border-radius: 12px;
+            line-height: 1.45;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .user {
+            margin-left: auto;
+            background: #2563eb;
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .assistant {
+            margin-right: auto;
+            background: #e5e7eb;
+            color: #111827;
+            border-bottom-left-radius: 4px;
+        }
+
+        .meta {
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 5px;
+        }
+
+        .input-area {
+            display: flex;
+            padding: 16px;
+            background: white;
+            border-top: 1px solid #e5e7eb;
+            gap: 10px;
+        }
+
+        #message-input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        #send-button {
+            padding: 12px 18px;
+            border: none;
+            border-radius: 8px;
+            background: #2563eb;
+            color: white;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        #send-button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .status {
+            padding: 0 16px 16px 16px;
+            color: #6b7280;
+            font-size: 13px;
+        }
+
+        .examples {
+            padding: 14px 20px;
+            background: #ffffff;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .examples button {
+            margin: 4px;
+            padding: 8px 10px;
+            border: 1px solid #d1d5db;
+            background: #ffffff;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .examples button:hover {
+            background: #f3f4f6;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>НКС ЛР №3 — Fine-tuned Qwen3 Chat</h1>
+        <p>Модель: Qwen/Qwen3-1.7B + LoRA adapter по книге Hands-On Machine Learning</p>
+    </div>
+
+    <div class="examples">
+        <button onclick="useExample('What is Scikit-Learn used for?')">What is Scikit-Learn used for?</button>
+        <button onclick="useExample('What are the main stages of a machine learning project?')">ML project stages</button>
+        <button onclick="useExample('Explain the difference between Keras and TensorFlow.')">Keras vs TensorFlow</button>
+        <button onclick="useExample('What is overfitting and how can it be reduced?')">Overfitting</button>
+    </div>
+
+    <div id="chat-window"></div>
+
+    <div class="input-area">
+        <input id="message-input" type="text" placeholder="Введите вопрос по машинному обучению..." />
+        <button id="send-button" onclick="sendMessage()">Отправить</button>
+    </div>
+
+    <div class="status" id="status">Готов к работе</div>
+</div>
+
+<script>
+    const chatWindow = document.getElementById("chat-window");
+    const input = document.getElementById("message-input");
+    const sendButton = document.getElementById("send-button");
+    const statusText = document.getElementById("status");
+
+    let history = [];
+
+    function escapeHtml(text) {
+        const div = document.createElement("div");
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    function addMessage(role, text, latency = null) {
+        const messageDiv = document.createElement("div");
+        messageDiv.className = "message " + role;
+
+        let label = role === "user" ? "Вы" : "Модель";
+        let html = `<strong>${label}:</strong><br>${escapeHtml(text)}`;
+
+        if (latency !== null) {
+            html += `<div class="meta">Latency: ${latency.toFixed(2)} sec</div>`;
+        }
+
+        messageDiv.innerHTML = html;
+        chatWindow.appendChild(messageDiv);
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+
+    function useExample(text) {
+        input.value = text;
+        input.focus();
+    }
+
+    async function sendMessage() {
+        const message = input.value.trim();
+
+        if (!message) {
+            return;
+        }
+
+        addMessage("user", message);
+
+        input.value = "";
+        sendButton.disabled = true;
+        statusText.textContent = "Модель генерирует ответ...";
+
+        try {
+            const response = await fetch("/chat", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    message: message,
+                    history: history,
+                }),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.detail || "Unknown server error");
+            }
+
+            const data = await response.json();
+
+            addMessage("assistant", data.response, data.latency_seconds);
+
+            history.push({
+                user: message,
+                assistant: data.response,
+            });
+
+            if (history.length > 5) {
+                history.shift();
+            }
+
+            statusText.textContent = "Готов к работе";
+
+        } catch (error) {
+            addMessage("assistant", "Ошибка: " + error.message);
+            statusText.textContent = "Ошибка";
+        } finally {
+            sendButton.disabled = false;
+            input.focus();
+        }
+    }
+
+    input.addEventListener("keydown", function(event) {
+        if (event.key === "Enter") {
+            sendMessage();
+        }
+    });
+
+    addMessage(
+        "assistant",
+        "Здравствуйте! Я учебный консультант по практическому машинному обучению. Задайте вопрос по Scikit-Learn, Keras, TensorFlow или этапам ML-проекта."
+    );
+</script>
+</body>
+</html>
